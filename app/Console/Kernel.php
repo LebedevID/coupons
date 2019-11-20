@@ -14,6 +14,9 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        'App\Console\Commands\LoadCoupons',
+		'App\Console\Commands\LoadShops',
+		'App\Console\Commands\LoadAll',
     ];
 
     /**
@@ -24,8 +27,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+		 echo ('Загрузка...');
+		 
+         $schedule->command('load:coupons')
+                  ->everyFiveMinute();
+		 $schedule->call(function() {
+			 echo ('Работает');
+		 });
     }
 
     /**
