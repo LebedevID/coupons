@@ -14,3 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/shops','ShopsController@getShops');
+Route::get('/shops/{shop_id}/coupons','CouponsController@getCoupons');
