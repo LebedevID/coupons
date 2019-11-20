@@ -87,4 +87,20 @@ class LoaderController extends Controller
         
     }
 
+    private function del_shops() {
+        App\Shops::query()->delete();
+    }
+
+    public function save_shops($shops) {
+		if (!empty($shops)) {
+			App\Shops::insert($shops);
+		}	
+	}
+
+    public function save_coupons($coupons) {	
+		if (!empty($coupons)) {
+			App\Coupons::insert($coupons);		
+		}
+	}
+
 }
