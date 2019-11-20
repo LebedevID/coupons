@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Symfony\Component\DomCrawler\Crawler;
+use App;
+use DB;
 
 class LoaderController extends Controller
 {
@@ -91,16 +94,57 @@ class LoaderController extends Controller
         App\Shops::query()->delete();
     }
 
-    public function save_shops($shops) {
+    private function save_shops($shops) {
 		if (!empty($shops)) {
 			App\Shops::insert($shops);
 		}	
 	}
 
-    public function save_coupons($coupons) {	
+    private function save_coupons($coupons) {	
 		if (!empty($coupons)) {
 			App\Coupons::insert($coupons);		
 		}
+    }
+    
+    public function load_shops() {
+		
+		$this->del_shops();
+		
+		echo 'Parsing shops...'.PHP_EOL;
+		$shops = $this->parse_shops();
+		echo 'Ok'.PHP_EOL;
+		
+		echo 'Saving shops...'.PHP_EOL;
+		$this->save_shops($shops);
+		echo 'Ok'.PHP_EOL;
+		
 	}
+
+    public function load_coupons() {   
+		
+		$shops = App\Shops::unloaded_coupons();
+		if (count($shops) == 0) {
+			App\Shops::where('id', '>', 0)->update(['coupons_loaded' => false]);
+			$shops = App\Shops::all();
+			if (count($shops) == 0) { 
+				echo "No shops.".PHP_EOL;
+				return false;
+			}
+		}
+		
+		foreach($shops as $shop) {
+			echo 'Parsing coupons for:'.$shop['shop_name'].PHP_EOL;
+			$coupons = $this->parse_coupons($shop['shop_url'], $shop['id']);
+			echo 'Ok'.PHP_EOL;
+			
+			App\Coupons::where('shop_id', $shop['id'])->delete();
+			
+			$this->save_coupons($coupons);	
+			$shop->coupons_loaded = true;
+			$shop->save();
+			
+		}	
+		return true;		
+    }
 
 }
