@@ -20,7 +20,7 @@ class CreateCouponsTable extends Migration
             $table->string('title')->nullable();
             $table->string('brand_name')->nullable();
             $table->text('description')->nullable();
-            $table->string('exp_date')->nullable();
+            $table->string('expiry_date')->nullable();
             $table->text('image_url')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
