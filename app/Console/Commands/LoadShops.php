@@ -11,7 +11,7 @@ class LoadShops extends Command
      *
      * @var string
      */
-    protected $signature = 'load:shops';
+    protected $signature = 'load:shops {proxy?}';
 
     /**
      * The console command description.
@@ -37,7 +37,8 @@ class LoadShops extends Command
      */
     public function handle()
     {
+		$proxy = $this->argument('proxy');
         $loader = new \App\Http\Controllers\LoaderController();
-		$loader->load_shops();
+		$loader->load_shops($proxy);
     }
 }

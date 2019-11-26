@@ -11,7 +11,7 @@ class LoadAll extends Command
      *
      * @var string
      */
-    protected $signature = 'load:all';
+    protected $signature = 'load:all {proxy?}';
 
     /**
      * The console command description.
@@ -37,8 +37,9 @@ class LoadAll extends Command
      */
     public function handle()
     {
+		$proxy = $this->argument('proxy');
         $loader = new \App\Http\Controllers\LoaderController();
-		$loader->load_shops();
-		$loader->load_coupons();
+		$loader->load_shops($proxy);
+		$loader->load_coupons($proxy);
     }
 }

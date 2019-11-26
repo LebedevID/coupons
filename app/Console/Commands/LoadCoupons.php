@@ -15,7 +15,7 @@ class LoadCoupons extends Command
      *
      * @var string
      */
-    protected $signature = 'load:coupons';
+    protected $signature = 'load:coupons {proxy?}';
 
     /**
      * The console command description.
@@ -41,10 +41,16 @@ class LoadCoupons extends Command
      */
     public function handle()
     {
+		$proxy = $this->argument('proxy');
         $loader = new \App\Http\Controllers\LoaderController();
-		if ($loader->load_coupons()) 
+		$result = $loader->load_coupons($proxy) ;
+		
+		if ($result) {
 			echo 'Loading ok.';
+		}
 		else
+		{
 			echo 'Loading error.';
+		}
     }
 }
